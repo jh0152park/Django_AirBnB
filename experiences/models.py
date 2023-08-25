@@ -4,4 +4,64 @@ from common.models import CommonModel
 
 # Create your models here.
 class Experience(CommonModel):
-    pass
+    # Location
+    country = models.CharField(
+        max_length=64,
+        default="South Korea",
+    )
+    city = models.CharField(
+        max_length=128,
+        default="Seoul",
+    )
+
+    # Name
+    name = models.CharField(
+        max_length=128,
+    )
+
+    # Host
+    host = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+    )
+
+    # Price
+    price = models.PositiveIntegerField()
+
+    # Address
+    address = models.CharField(
+        max_length=128,
+    )
+
+    # Times
+    start = models.TimeField()
+    end = models.TimeField()
+
+    # Description
+    description = models.TextField()
+
+    # Perks, what we can do with is experience program
+    perks = models.ManyToManyField(
+        "experiences.Perk",
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class Perk(CommonModel):
+    name = models.CharField(
+        max_length=64,
+    )
+    detail = models.CharField(
+        max_length=128,
+        blank=True,
+        default="",
+    )
+    explanation = models.TextField(
+        blank=True,
+        default="",
+    )
+
+    def __str__(self):
+        return self.name
