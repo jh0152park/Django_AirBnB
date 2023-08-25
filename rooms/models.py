@@ -57,12 +57,15 @@ class Room(CommonModel):
     )
 
     # Owner
+    # One room have to have one owner, but one onwer can have many rooms.
     owner = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
     )
 
     # Amenity
+    # One room can have different amenity,
+    # some room have 1 amenity but different room cam have 7 at the same time.
     amenity = models.ManyToManyField(
         "rooms.Amenity",
     )
