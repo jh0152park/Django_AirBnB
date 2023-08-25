@@ -18,6 +18,12 @@ class Room(CommonModel):
             "Shared Room",
         )
 
+    # Name of the room
+    name = models.CharField(
+        max_length=128,
+        default="",
+    )
+
     # Location
     country = models.CharField(
         max_length=64,
@@ -70,9 +76,15 @@ class Room(CommonModel):
         "rooms.Amenity",
     )
 
+    def __str__(self):
+        return self.name
+
 
 # Amenity Definition
 class Amenity(CommonModel):
+    class Meta:
+        verbose_name_plural = "Amenities"
+
     name = models.CharField(
         max_length=128,
     )
@@ -80,4 +92,8 @@ class Amenity(CommonModel):
         max_length=128,
         default="",
         null=True,
+        blank=True,
     )
+
+    def __str__(self):
+        return self.name
