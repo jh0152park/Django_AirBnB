@@ -4,7 +4,7 @@ from common.models import CommonModel
 
 # Room Definition
 class Room(CommonModel):
-    class RoomCategoryOptions(models.TextChoices):
+    class RoomKindOptions(models.TextChoices):
         ENTIRE_PLACE = (
             "entire_place",
             "Entire Place",
@@ -56,10 +56,19 @@ class Room(CommonModel):
         default=False,
     )
 
-    # Category
-    category = models.CharField(
+    # Room Kind
+    kind = models.CharField(
         max_length=128,
-        choices=RoomCategoryOptions.choices,
+        choices=RoomKindOptions.choices,
+        null=True,
+    )
+
+    # Category
+    category = models.ForeignKey(
+        "categories.Category",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
 
     # Owner
