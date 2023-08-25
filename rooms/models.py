@@ -1,8 +1,9 @@
 from django.db import models
+from common.models import CommonModel
 
 
 # Room Definition
-class Room(models.Model):
+class Room(CommonModel):
     class RoomCategoryOptions(models.TextChoices):
         ENTIRE_PLACE = (
             "entire_place",
@@ -61,9 +62,14 @@ class Room(models.Model):
         on_delete=models.CASCADE,
     )
 
+    # Amenity
+    amenity = models.ManyToManyField(
+        "rooms.Amenity",
+    )
+
 
 # Amenity Definition
-class Amenity(models.Model):
+class Amenity(CommonModel):
     name = models.CharField(
         max_length=128,
     )
