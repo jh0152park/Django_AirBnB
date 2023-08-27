@@ -69,6 +69,7 @@ class Room(CommonModel):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        # related_name="rooms",
     )
 
     # Owner
@@ -76,6 +77,7 @@ class Room(CommonModel):
     owner = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
+        # related_name="rooms",
     )
 
     # Amenity
@@ -83,6 +85,7 @@ class Room(CommonModel):
     # some room have 1 amenity but different room cam have 7 at the same time.
     amenity = models.ManyToManyField(
         "rooms.Amenity",
+        # related_name="rooms",
     )
 
     def __str__(self):
