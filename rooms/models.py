@@ -98,7 +98,7 @@ class Room(CommonModel):
         reviews = self.review_set.all()
         if not reviews:
             return "No Review"
-        return sum([r.rating for r in reviews]) / len(reviews)
+        return round(sum([r.rating for r in reviews]) / len(reviews), 1)
 
 
 # Amenity Definition
