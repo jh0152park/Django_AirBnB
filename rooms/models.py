@@ -94,6 +94,12 @@ class Room(CommonModel):
     def total_amenities(self):
         return self.amenity.count()
 
+    def average_rate(self):
+        reviews = self.review_set.all()
+        if not reviews:
+            return "No Review"
+        return sum([r.rating for r in reviews]) / len(reviews)
+
 
 # Amenity Definition
 class Amenity(CommonModel):
