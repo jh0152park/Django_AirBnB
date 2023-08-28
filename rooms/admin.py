@@ -6,6 +6,7 @@ from .models import Room, Amenity
 class RoomAdmin(admin.ModelAdmin):
     list_display = (
         "name",
+        "owner",
         "price",
         "total_amenities",
         "average_rate",
@@ -18,11 +19,14 @@ class RoomAdmin(admin.ModelAdmin):
         "country",
         "pet_allow",
         "amenity",
-    )
-
-    readonly_fields = (
         "created_at",
         "updated_at",
+    )
+
+    search_fields = (
+        "name",
+        "price",
+        "owner__username",
     )
 
 
