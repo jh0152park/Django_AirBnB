@@ -9,7 +9,10 @@ def see_all_room(request):
     return render(
         request,
         "all_rooms.html",
-        {"rooms": rooms},
+        {
+            "rooms": rooms,
+            "title": "See All Rooms here!",
+        },
     )
 
 
