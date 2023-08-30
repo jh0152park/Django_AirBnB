@@ -12,7 +12,11 @@ def all_categories(request):
         serializer = CategorySerializer(all_categories, many=True)
         return Response(serializer.data)
     elif request.method == "POST":
-        # request.data
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            return Response(({"status": "success"}))
+    else:
+        return Response(serializer.errors)
 
 
 @api_view()
