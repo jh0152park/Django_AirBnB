@@ -3,12 +3,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotAuthenticated
+from rest_framework.exceptions import ParseError
 from rest_framework.status import HTTP_204_NO_CONTENT
 from .models import Room
 from .models import Amenity
 from .serializers import AmenitySerializer
 from .serializers import RoomListSerializer
 from .serializers import RoomDetailsSerializer
+from categories.models import Category
 
 
 class Amenities(APIView):
@@ -72,14 +75,30 @@ class Rooms(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        # all_rooms = Room.objects.all()
-        serializer = RoomDetailsSerializer(data=request.data)
-        if serializer.is_valid():
-            room = serializer.save()
-            serializer = RoomDetailsSerializer(room)
-            return Response(serializer.data)
+        if request.user.is_authenticated:
+            serializer = RoomDetailsSerializer(data=request.data)
+            if serializer.is_valid():
+                category_pk = request.data.get("cateogry")
+                if not category_pk:
+                    raise ParseError
+
+                try:
+                    category = Category.objects.get(pk=category_pk)
+                    if category.kind == Category.CategoryKindOption.EXPERIENCES:
+                        raise ParseError
+                except Category.DoesNotExist:
+                    raise ParseError
+
+                room = serializer.save(
+                    owner=request.user,
+                    category=category,
+                )
+                serializer = RoomDetailsSerializer(room)
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors)
         else:
-            return Response(serializer.errors)
+            return NotAuthenticated
 
 
 class RoomDetail(APIView):
@@ -87,7 +106,7 @@ class RoomDetail(APIView):
         try:
             return Room.objects.get(pk=pk)
         except Room.DoesNotExist:
-            raise NotFound()
+            raise NotFound
 
     def get(self, request, pk):
         room = self.get_object(pk)
