@@ -8,6 +8,7 @@ from .models import Room
 from .models import Amenity
 from .serializers import AmenitySerializer
 from .serializers import RoomListSerializer
+from .serializers import RoomDetailsSerializer
 
 
 class Amenities(APIView):
@@ -70,31 +71,25 @@ class Rooms(APIView):
         serializer = RoomListSerializer(all_rooms, many=True)
         return Response(serializer.data)
 
-
-# Create your views here.
-# def see_all_room(request):
-#     rooms = Room.objects.all()
-#     return render(
-#         request,
-#         "all_rooms.html",
-#         {
-#             "rooms": rooms,
-#             "title": "See All Rooms here!",
-#         },
-#     )
+    def post(self, request):
+        # all_rooms = Room.objects.all()
+        serializer = RoomDetailsSerializer(data=request.data)
+        if serializer.is_valid():
+            room = serializer.save()
+            serializer = RoomDetailsSerializer(room)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
 
 
-# def see_one_room(request, room_id):
-#     try:
-#         room = Room.objects.get(pk=room_id)
-#         return render(
-#             request,
-#             "room_detail.html",
-#             {"room": room},
-#         )
-#     except Room.DoesNotExist:
-#         return render(
-#             request,
-#             "room_detail.html",
-#             {"not_found": True},
-#         )
+class RoomDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound()
+
+    def get(self, request, pk):
+        room = self.get_object(pk)
+        serializer = RoomDetailsSerializer(room)
+        return Response(serializer.data)
