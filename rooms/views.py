@@ -7,6 +7,7 @@ from rest_framework.status import HTTP_204_NO_CONTENT
 from .models import Room
 from .models import Amenity
 from .serializers import AmenitySerializer
+from .serializers import RoomSerializer
 
 
 class Amenities(APIView):
@@ -61,6 +62,13 @@ class AmenityDetail(APIView):
         amenitry = self.get_object(pk)
         amenitry.delete()
         return Response(status=HTTP_204_NO_CONTENT)
+
+
+class Rooms(APIView):
+    def get(self, request):
+        all_rooms = Room.objects.all()
+        serializer = RoomSerializer(all_rooms, many=True)
+        return Response(serializer.data)
 
 
 # Create your views here.
