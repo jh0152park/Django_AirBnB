@@ -6,6 +6,7 @@ from .models import Room
 from users.serializers import TinyUserSerializer
 from categories.serializers import CategorySerializer
 from reviews.serializers import ReviewSerializer
+from medias.serializers import PhotoSerializer
 
 
 class AmenitySerializer(ModelSerializer):
@@ -28,10 +29,15 @@ class RoomListSerializer(ModelSerializer):
             "pk",
             "room_rate",
             "is_owner",
+            "photo_set",
         )
 
     room_rate = SerializerMethodField()
     is_owner = SerializerMethodField()
+    photo_set = PhotoSerializer(
+        many=True,
+        read_only=True,
+    )
 
     def get_room_rate(self, room):
         return room.average_rate()
@@ -54,10 +60,10 @@ class RoomDetailsSerializer(ModelSerializer):
     )
     room_rate = SerializerMethodField()
     is_owner = SerializerMethodField()
-    # review_set = ReviewSerializer(
-    #     many=True,
-    #     read_only=True,
-    # )
+    photo_set = PhotoSerializer(
+        many=True,
+        read_only=True,
+    )
 
     class Meta:
         model = Room
