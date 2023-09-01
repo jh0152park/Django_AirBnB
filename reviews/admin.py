@@ -27,10 +27,12 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = (
         "__str__",
         "review",
+        "room",
     )
 
     list_filter = (
         WordFilter,
+        "room",
         "rating",
         "user__is_host",
         "room__category",
