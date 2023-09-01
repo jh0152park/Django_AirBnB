@@ -5,6 +5,7 @@ from .models import Amenity
 from .models import Room
 from users.serializers import TinyUserSerializer
 from categories.serializers import CategorySerializer
+from reviews.serializers import ReviewSerializer
 
 
 class AmenitySerializer(ModelSerializer):
@@ -53,6 +54,10 @@ class RoomDetailsSerializer(ModelSerializer):
     )
     room_rate = SerializerMethodField()
     is_owner = SerializerMethodField()
+    review_set = ReviewSerializer(
+        many=True,
+        read_only=True,
+    )
 
     class Meta:
         model = Room
