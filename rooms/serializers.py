@@ -1,4 +1,5 @@
 from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import SerializerMethodField
 
 from .models import Amenity
 from .models import Room
@@ -24,7 +25,13 @@ class RoomListSerializer(ModelSerializer):
             "city",
             "price",
             "pk",
+            "room_rate",
         )
+
+    room_rate = SerializerMethodField()
+
+    def get_room_rate(self, room):
+        return room.average_rate()
 
 
 class RoomDetailsSerializer(ModelSerializer):
@@ -38,10 +45,11 @@ class RoomDetailsSerializer(ModelSerializer):
         many=True,
         read_only=True,
     )
+    room_rate = SerializerMethodField()
 
     class Meta:
         model = Room
         fields = "__all__"
 
-    # def create(self, validated_data):
-    #     return Room.objects.create(**validated_data)
+    def get_room_rate(self, room):
+        return room.average_rate()

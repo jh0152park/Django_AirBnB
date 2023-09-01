@@ -97,7 +97,7 @@ class Room(CommonModel):
     def average_rate(self):
         reviews = self.review_set.all()
         if not reviews:
-            return "No Review"
+            return 0
         return round(
             sum([r["rating"] for r in reviews.values("rating")]) / len(reviews), 1
         )
