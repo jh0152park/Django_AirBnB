@@ -26,12 +26,18 @@ class RoomListSerializer(ModelSerializer):
             "price",
             "pk",
             "room_rate",
+            "is_owner",
         )
 
     room_rate = SerializerMethodField()
+    is_owner = SerializerMethodField()
 
     def get_room_rate(self, room):
         return room.average_rate()
+
+    def get_is_owner(self, room):
+        request = self.context["request"]
+        return room.owner == request.user
 
 
 class RoomDetailsSerializer(ModelSerializer):
@@ -46,6 +52,7 @@ class RoomDetailsSerializer(ModelSerializer):
         read_only=True,
     )
     room_rate = SerializerMethodField()
+    is_owner = SerializerMethodField()
 
     class Meta:
         model = Room
@@ -53,3 +60,7 @@ class RoomDetailsSerializer(ModelSerializer):
 
     def get_room_rate(self, room):
         return room.average_rate()
+
+    def get_is_owner(self, room):
+        request = self.context["request"]
+        return room.owner == request.user
