@@ -23,12 +23,7 @@ class PhotoDetail(APIView):
 
         if not request.user.is_authenticated:
             raise NotAuthenticated
-        # if photo.room:
-        #     if photo.room.owner != request.user:
-        #         raise PermissionDenied
-        # elif photo.experience:
-        #     if photo.experience.host != request.user:
-        #         raise PermissionDenied
+
         if (photo.room and photo.room.owner != request.user) or (
             photo.experience and photo.experience.host != request.user
         ):
