@@ -212,7 +212,7 @@ class RoomReviews(APIView):
         return Response(converter.data)
 
 
-class RoomAmenity(APIView):
+class RoomAmenites(APIView):
     def get_object(self, pk):
         try:
             return Room.objects.get(pk=pk)
@@ -233,3 +233,14 @@ class RoomAmenity(APIView):
             many=True,
         )
         return Response(converter.data)
+
+
+class RoomPhotos(APIView):
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound()
+
+    def post(self, request, pk):
+        pass
