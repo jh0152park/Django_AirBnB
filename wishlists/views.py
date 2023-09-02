@@ -31,3 +31,7 @@ class Wishlists(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+
+class WishlistDetail(APIView):
+    permission_classes = [IsAuthenticated]
