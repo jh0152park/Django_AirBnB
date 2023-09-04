@@ -307,7 +307,13 @@ class RoomBookings(APIView):
         serializer = CreateRoomBookingSerializer(data=request.data)
 
         if serializer.is_valid():
-            pass
+            booking = serializer.save(
+                room=room,
+                user=request.user,
+                category=Booking.BookingOption.ROOM,
+            )
+            serializer = PublicBookingSerializer(booking)
+            return Response(serializer.data)
 
         else:
             return Response(serializer.errors)
