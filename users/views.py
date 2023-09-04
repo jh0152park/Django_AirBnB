@@ -6,6 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from .serializers import PrivateUserSerializer
 
+from users.models import User
+
 
 class Me(APIView):
     permission_classes = [IsAuthenticated]
@@ -46,3 +48,32 @@ class Users(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+
+class PublicUser(APIView):
+    def get(self, request, username):
+        try:
+            user = User.objects.get(username=username)
+        except user.DoesNotExist:
+            raise exceptions.NotFound
+        serializer = PrivateUserSerializer(user)
+        return Response(serializer.data)
+
+
+class changePassword(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        user = request.user
+        old_password = request.data.get("old_password")
+        new_password = request.data.get("new_password")
+
+        if not old_password or not new_password:
+            raise exceptions.ParseError
+
+        if user.check_password(old_password):
+            user.set_password(new_password)
+            user.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            raise exceptions.ParseError
