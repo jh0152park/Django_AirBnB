@@ -1,3 +1,7 @@
+from django.contrib.auth import login
+from django.contrib.auth import logout
+from django.contrib.auth import authenticate
+
 from rest_framework import status
 from rest_framework import exceptions
 from rest_framework.views import APIView
@@ -77,3 +81,30 @@ class changePassword(APIView):
             return Response(status=status.HTTP_200_OK)
         else:
             raise exceptions.ParseError
+
+
+class LogIn(APIView):
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        if not username or not password:
+            raise exceptions.ParseError
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password,
+        )
+        if user:
+            login(request, user)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class LogOut(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        logout(request)
+        return Response(status=status.HTTP_200_OK)
