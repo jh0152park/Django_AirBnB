@@ -49,3 +49,19 @@ class CreateRoomBookingSerializer(ModelSerializer):
             )
 
         return value
+
+    def validate(self, data):
+        if data["check_in_date"] >= data["check_out_date"]:
+            raise ValidationError(
+                "Check out data is looks like smaller than check in date."
+            )
+
+        if Booking.objects.filter(
+            check_in_date__lte=data["check_out_date"],
+            check_out_date__gte=data["check_in_date"],
+        ).exists():
+            raise ValidationError(
+                "Already has bookings between check in and check out date"
+            )
+
+        return data
