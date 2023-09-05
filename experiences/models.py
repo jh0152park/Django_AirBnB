@@ -41,9 +41,7 @@ class Experience(CommonModel):
     description = models.TextField()
 
     # Perks, what we can do with is experience program
-    perks = models.ManyToManyField(
-        "experiences.Perk",
-    )
+    perks = models.ManyToManyField("experiences.Perk")
 
     # Category
     category = models.ForeignKey(
@@ -73,3 +71,23 @@ class Perk(CommonModel):
 
     def __str__(self):
         return self.name
+
+
+"""
+{
+    "country": "South Korea",
+    "city": "Seoul",
+    "name": "Watch movie",
+    "host": 1,
+    "price":132,
+    "address":"123",
+    "start": 13:00:00,
+    "end": 17:00:00,
+    "description":"literally watching movie",
+    "perks": {
+        "name": "김치",
+        "detail": "김치만들어먹기",
+        "explanation": ""
+    }
+}
+"""

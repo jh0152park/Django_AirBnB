@@ -9,11 +9,24 @@ from .serializers import PerkSerializer
 from .serializers import ExperienceSerializer
 
 
-class Experiencis(APIView):
+class Experiencies(APIView):
     def get(self, request):
         experiencies = Experience.objects.all()
         serializer = ExperienceSerializer(experiencies, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ExperienceSerializer(data=request.data)
+        if serializer.is_valid():
+            experience = serializer.save()
+            serializer = ExperienceSerializer(experiences)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+class ExperienceDetail(APIView):
+    pass
 
 
 class Perks(APIView):
