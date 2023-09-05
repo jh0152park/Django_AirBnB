@@ -19,7 +19,7 @@ class Experiencies(APIView):
         serializer = ExperienceSerializer(data=request.data)
         if serializer.is_valid():
             experience = serializer.save()
-            serializer = ExperienceSerializer(experiences)
+            serializer = ExperienceSerializer(experience)
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
