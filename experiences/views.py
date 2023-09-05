@@ -1,12 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
+from rest_framework import status
 from rest_framework.status import HTTP_204_NO_CONTENT
 
 from .models import Perk
 from .models import Experience
 from .serializers import PerkSerializer
 from .serializers import ExperienceSerializer
+from .serializers import ExperienceDetailSerializer
 
 
 class Experiencies(APIView):
@@ -26,7 +28,43 @@ class Experiencies(APIView):
 
 
 class ExperienceDetail(APIView):
-    pass
+    def get_object(self, pk):
+        try:
+            return Experience.objects.get(pk=pk)
+        except Experience.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        experience = self.get_object(pk)
+        serializer = ExperienceDetailSerializer(
+            experience,
+            context={"request": request},
+        )
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        experience = self.get_object(pk)
+        rawdata = ExperienceDetailSerializer(
+            experience,
+            data=request.data,
+            partial=True,
+        )
+        if rawdata.is_valid():
+            data = rawdata.save()
+
+            update_perks = request.data.get("perks")
+            for perk in update_perks:
+                data.perks.add(Perk.objects.get(pk=perk))
+
+            convert = ExperienceDetailSerializer(data)
+            return Response(convert.data)
+        else:
+            return Response(rawdata.errors)
+
+    def delete(self, request, pk):
+        experience = self.get_object(pk)
+        experience.delete()
+        return Response(status=status.HTTP_200_OK)
 
 
 class Perks(APIView):

@@ -41,7 +41,9 @@ class Experience(CommonModel):
     description = models.TextField()
 
     # Perks, what we can do with is experience program
-    perks = models.ManyToManyField("experiences.Perk")
+    perks = models.ManyToManyField(
+        "experiences.Perk",
+    )
 
     # Category
     category = models.ForeignKey(
@@ -83,7 +85,7 @@ class Perk(CommonModel):
     "start": "13:00",
     "end": "17:00",
     "description":"literally watching movie",
-    "perks": [1],
-    "host": 1
+    "host": 1,
+    "perks": [3,4]
 }
 """
