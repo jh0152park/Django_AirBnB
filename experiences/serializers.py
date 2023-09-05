@@ -22,4 +22,14 @@ class ExperienceSerializer(ModelSerializer):
 
     class Meta:
         model = Experience
-        fields = "__all__"
+        # fields = "__all__"
+        exclude = (
+            "created_at",
+            "updated_at",
+            "address",
+            "start",
+            "end",
+            "description",
+            "host",
+            "category",
+        )
