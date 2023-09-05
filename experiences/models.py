@@ -78,16 +78,12 @@ class Perk(CommonModel):
     "country": "South Korea",
     "city": "Seoul",
     "name": "Watch movie",
-    "host": 1,
     "price":132,
     "address":"123",
-    "start": 13:00:00,
-    "end": 17:00:00,
+    "start": "13:00",
+    "end": "17:00",
     "description":"literally watching movie",
-    "perks": {
-        "name": "김치",
-        "detail": "김치만들어먹기",
-        "explanation": ""
-    }
+    "perks": [1],
+    "host": 1
 }
 """
