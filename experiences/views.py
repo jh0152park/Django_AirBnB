@@ -7,6 +7,10 @@ from .models import Perk
 from .serializers import PerkSerializer
 
 
+class Experience(APIView):
+    pass
+
+
 class Perks(APIView):
     def get(self, request):
         all_perks = Perk.objects.all()
