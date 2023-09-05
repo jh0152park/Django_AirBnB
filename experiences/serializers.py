@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import TimeField
+from rest_framework.serializers import SerializerMethodField
 
 
 from .models import Perk
@@ -11,36 +12,39 @@ class PerkSerializer(ModelSerializer):
         model = Perk
         # fields = "__all__"
         exclude = (
+            "id",
             "created_at",
             "updated_at",
         )
 
 
+class PerkNameSerializer(ModelSerializer):
+    class Meta:
+        model = Perk
+        fields = ("name",)
+
+
 class ExperienceSerializer(ModelSerializer):
-    # perks = PerkSerializer(
-    #     read_only=True,
-    #     many=True,
-    # )
-
-    # start = TimeField()
-    # end = TimeField()
-
     class Meta:
         model = Experience
         # fields = "__all__"
         exclude = (
             "created_at",
             "updated_at",
-            # "address",
-            # "start",
-            # "end",
-            # "description",
-            # "host",
             "category",
         )
 
-    def validate(self, attrs):
-        print("###############")
-        print(attrs)
-        print("###############")
-        return attrs
+
+class ExperienceDetailSerializer(ModelSerializer):
+    perks = PerkNameSerializer(
+        read_only=True,
+        many=True,
+    )
+
+    class Meta:
+        model = Experience
+        exclude = (
+            "created_at",
+            "updated_at",
+            "category",
+        )
