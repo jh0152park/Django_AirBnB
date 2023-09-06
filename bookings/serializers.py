@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.utils import timezone
 
 from rest_framework.serializers import ModelSerializer
@@ -31,6 +33,28 @@ class ExperienceBookingListSerializer(ModelSerializer):
             "room",
             "experience",
         )
+
+
+class CreateExperienceBookingSerializer(ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = (
+            "experience_time",
+            "guests",
+            "user",
+        )
+
+    def validate_experience_time(self, value):
+        now = timezone.localtime(timezone.now())
+        print(f"input value is {value}")
+        print(f"now is {now}")
+        print(f"type is {type(value)} and {type(now)}")
+        if now > value:
+            raise ValidationError(
+                "Can't reservation due to experience time isn't future!"
+            )
+
+        return value
 
 
 class CreateRoomBookingSerializer(ModelSerializer):

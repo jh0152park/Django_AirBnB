@@ -15,6 +15,7 @@ from .serializers import ExperienceDetailSerializer
 
 from bookings.models import Booking
 from bookings.serializers import ExperienceBookingListSerializer
+from bookings.serializers import CreateExperienceBookingSerializer
 
 
 class Experiencies(APIView):
@@ -148,3 +149,29 @@ class ExperienceBookingLists(APIView):
             many=True,
         )
         return Response(serializer.data)
+
+    def post(self, request, pk):
+        experience = self.get_object(pk)
+        serializer = CreateExperienceBookingSerializer(
+            data=request.data,
+        )
+
+        if serializer.is_valid():
+            new_experience = serializer.save(
+                experience=experience,
+                user=request.user,
+                category=Booking.BookingOption.EXPERIENCE,
+            )
+            serializer = CreateExperienceBookingSerializer(new_experience)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+"""
+{
+"user":1,
+"experience_time": "2023-11-20",
+"guest":2
+}
+"""
