@@ -12,7 +12,7 @@ class PerkSerializer(ModelSerializer):
         model = Perk
         # fields = "__all__"
         exclude = (
-            "id",
+            # "id",
             "created_at",
             "updated_at",
         )
@@ -21,7 +21,10 @@ class PerkSerializer(ModelSerializer):
 class PerkNameSerializer(ModelSerializer):
     class Meta:
         model = Perk
-        fields = ("name",)
+        exclude = (
+            "created_at",
+            "updated_at",
+        )
 
 
 class ExperienceSerializer(ModelSerializer):
@@ -36,10 +39,10 @@ class ExperienceSerializer(ModelSerializer):
 
 
 class ExperienceDetailSerializer(ModelSerializer):
-    perks = PerkNameSerializer(
-        read_only=True,
-        many=True,
-    )
+    # perks = PerkNameSerializer(
+    #     read_only=True,
+    #     many=True,
+    # )
 
     class Meta:
         model = Experience
