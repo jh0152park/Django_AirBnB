@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,13 +13,17 @@ from .serializers import PerkSerializer
 from .serializers import ExperienceSerializer
 from .serializers import ExperienceDetailSerializer
 
+from bookings.models import Booking
 from bookings.serializers import ExperienceBookingListSerializer
 
 
 class Experiencies(APIView):
     def get(self, request):
         experiencies = Experience.objects.all()
-        serializer = ExperienceSerializer(experiencies, many=True)
+        serializer = ExperienceSerializer(
+            experiencies,
+            many=True,
+        )
         return Response(serializer.data)
 
     def post(self, request):
@@ -119,7 +125,6 @@ class PerkDetails(APIView):
 
 
 class ExperienceBookingLists(APIView):
-    # ExperienceBookingListSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
@@ -127,3 +132,19 @@ class ExperienceBookingLists(APIView):
             return Experience.objects.get(pk=pk)
         except Experience.DoesNotExist:
             raise NotFound
+
+    def get(self, request, pk):
+        now = timezone.now()
+        local_time = timezone.localtime(now).date()
+        experience = self.get_object(pk)
+
+        bookings = Booking.objects.filter(
+            experience=experience,
+            category=Booking.BookingOption.EXPERIENCE,
+            experience_time__gt=local_time,
+        )
+        serializer = ExperienceBookingListSerializer(
+            bookings,
+            many=True,
+        )
+        return Response(serializer.data)

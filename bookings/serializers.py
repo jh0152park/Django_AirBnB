@@ -22,7 +22,15 @@ class PublicBookingSerializer(ModelSerializer):
 class ExperienceBookingListSerializer(ModelSerializer):
     class Meta:
         model = Booking
-        fields = "__all__"
+        exclude = (
+            "created_at",
+            "updated_at",
+            "category",
+            "check_in_date",
+            "check_out_date",
+            "room",
+            "experience",
+        )
 
 
 class CreateRoomBookingSerializer(ModelSerializer):
