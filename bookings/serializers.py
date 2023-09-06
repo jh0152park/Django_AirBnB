@@ -19,6 +19,12 @@ class PublicBookingSerializer(ModelSerializer):
         )
 
 
+class ExperienceBookingListSerializer(ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = "__all__"
+
+
 class CreateRoomBookingSerializer(ModelSerializer):
     check_in_date = DateField()
     check_out_date = DateField()
