@@ -13,9 +13,11 @@ from .serializers import PerkSerializer
 from .serializers import ExperienceSerializer
 from .serializers import ExperienceDetailSerializer
 
+
 from bookings.models import Booking
 from bookings.serializers import ExperienceBookingListSerializer
 from bookings.serializers import CreateExperienceBookingSerializer
+from bookings.serializers import ExperienceBookingDetailSerializer
 
 
 class Experiencies(APIView):
@@ -168,10 +170,16 @@ class ExperienceBookingLists(APIView):
             return Response(serializer.errors)
 
 
-"""
-{
-"user":1,
-"experience_time": "2023-11-20",
-"guest":2
-}
-"""
+class ExperienceBookingDetail(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, booking_id):
+        try:
+            return Booking.objects.get(id=booking_id)
+        except Booking.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk, booking_id):
+        booking = self.get_object(booking_id)
+        seriailizer = ExperienceBookingDetailSerializer(booking)
+        return Response(seriailizer.data)
