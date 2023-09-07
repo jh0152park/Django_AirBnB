@@ -103,3 +103,9 @@ class CreateRoomBookingSerializer(ModelSerializer):
             )
 
         return data
+
+
+class ExperienceBookingDetailSerializer(ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = "__all__"
