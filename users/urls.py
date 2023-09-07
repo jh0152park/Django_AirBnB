@@ -7,6 +7,7 @@ from .views import LogOut
 from .views import Users
 from .views import PublicUser
 from .views import changePassword
+from .views import JWTLogIn
 
 urlpatterns = [
     path("", Users.as_view()),
@@ -15,5 +16,6 @@ urlpatterns = [
     path("log-in", LogIn.as_view()),
     path("log-out", LogOut.as_view()),
     path("token-login", obtain_auth_token),
+    path("jwt-login", JWTLogIn.as_view()),
     path("@<str:username>", PublicUser.as_view()),
 ]
