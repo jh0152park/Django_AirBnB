@@ -183,3 +183,8 @@ class ExperienceBookingDetail(APIView):
         booking = self.get_object(booking_id)
         seriailizer = ExperienceBookingDetailSerializer(booking)
         return Response(seriailizer.data)
+
+    def delete(self, request, pk, booking_id):
+        booking = self.get_object(booking_id)
+        booking.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
