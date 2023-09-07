@@ -108,4 +108,10 @@ class CreateRoomBookingSerializer(ModelSerializer):
 class ExperienceBookingDetailSerializer(ModelSerializer):
     class Meta:
         model = Booking
-        fields = "__all__"
+        # fields = "__all__"
+        exclude = (
+            "created_at",
+            "updated_at",
+            "category",
+            "user",
+        )

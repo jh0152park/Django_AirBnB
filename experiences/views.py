@@ -184,6 +184,22 @@ class ExperienceBookingDetail(APIView):
         seriailizer = ExperienceBookingDetailSerializer(booking)
         return Response(seriailizer.data)
 
+    def post(self, request, pk, booking_id):
+        booking = self.get_object(booking_id)
+        seriailizer = ExperienceBookingDetailSerializer(
+            booking,
+            data=request.data,
+        )
+        if seriailizer.is_valid():
+            update_booking = seriailizer.save(
+                user=request.user,
+                category=Booking.BookingOption.EXPERIENCE,
+            )
+            seriailizer = ExperienceBookingDetailSerializer(update_booking)
+            return Response(seriailizer.data)
+        else:
+            return Response(seriailizer.errors)
+
     def delete(self, request, pk, booking_id):
         booking = self.get_object(booking_id)
         booking.delete()
