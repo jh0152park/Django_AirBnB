@@ -8,6 +8,7 @@ from rest_framework.exceptions import NotAuthenticated
 from rest_framework.exceptions import ParseError
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.status import HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import Room
@@ -38,7 +39,7 @@ class Amenities(APIView):
                 AmenitySerializer(amenity).data,
             )
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 class AmenityDetail(APIView):
@@ -70,7 +71,7 @@ class AmenityDetail(APIView):
                 AmenitySerializer(update_amenity).data,
             )
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         amenitry = self.get_object(pk)
@@ -121,7 +122,7 @@ class Rooms(APIView):
             except Exception:
                 raise ParseError("Amenity not found.")
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 class RoomDetail(APIView):
@@ -182,7 +183,7 @@ class RoomDetail(APIView):
                 raise ParseError("Amenity not found.")
 
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         room = self.get_object(pk)
@@ -274,7 +275,7 @@ class RoomPhotos(APIView):
             serializer = PhotoSerializer(photo)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 class RoomBookings(APIView):
@@ -316,4 +317,4 @@ class RoomBookings(APIView):
             return Response(serializer.data)
 
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
