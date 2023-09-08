@@ -69,3 +69,43 @@ class TestAmenities(APITestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertIn("name", data)
+
+
+class TestAmenity(APITestCase):
+    NAME = "Test Amenity"
+    DESCRIPTION = "TEST Description"
+
+    def setUp(self):
+        Amenity.objects.create(
+            name=self.NAME,
+            description=self.DESCRIPTION,
+        )
+
+    def test_amenity_not_found(self):
+        res = self.client.get("/api/v1/rooms/amenities/10")
+        self.assertEqual(res.status_code, 404)
+
+    def test_get_amenity(self):
+        res = self.client.get("/api/v1/rooms/amenities/1")
+        self.assertEqual(res.status_code, 200)
+
+        data = res.json()
+
+        self.assertEqual(
+            data["name"],
+            self.NAME,
+        )
+        self.assertEqual(
+            data["description"],
+            self.DESCRIPTION,
+        )
+
+    # create put test code is my challenge
+
+    def test_delete_amenity(self):
+        res = self.client.delete("/api/v1/rooms/amenities/1")
+        self.assertEqual(
+            res.status_code,
+            204,
+            "status code of delete amenity is not a 204",
+        )
