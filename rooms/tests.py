@@ -101,6 +101,57 @@ class TestAmenity(APITestCase):
         )
 
     # create put test code is my challenge
+    def test_put_amenity(self):
+        res = self.client.get("/api/v1/rooms/amenities/1")
+        self.assertEqual(
+            res.status_code,
+            200,
+            "status code is not 200 at test put code",
+        )
+
+        data = res.json()
+        self.assertEqual(
+            data["name"],
+            self.NAME,
+        )
+        self.assertEqual(
+            data["description"],
+            self.DESCRIPTION,
+        )
+
+        res = self.client.put(
+            "/api/v1/rooms/amenities/1",
+            data={
+                "name": self.NAME,
+            },
+        )
+        data = res.json()
+        self.assertEqual(
+            res.status_code,
+            200,
+            "status code is not 200 at name put",
+        )
+        self.assertEqual(
+            data["name"],
+            self.NAME,
+        )
+
+        res = self.client.put(
+            "/api/v1/rooms/amenities/1",
+            data={
+                "description": self.DESCRIPTION,
+            },
+        )
+        data = res.json()
+        self.assertEqual(
+            res.status_code,
+            200,
+            "status code is not 200 at name put",
+        )
+        self.assertEqual(
+            data["description"],
+            self.DESCRIPTION,
+        )
 
     def test_delete_amenity(self):
         res = self.client.delete("/api/v1/rooms/amenities/1")
