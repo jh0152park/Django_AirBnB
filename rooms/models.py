@@ -102,6 +102,9 @@ class Room(CommonModel):
             sum([r["rating"] for r in reviews.values("rating")]) / len(reviews), 1
         )
 
+    def get_review_count(self):
+        return self.review_set.count()
+
 
 # Amenity Definition
 class Amenity(CommonModel):
