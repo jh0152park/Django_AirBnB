@@ -66,6 +66,7 @@ class RoomDetailsSerializer(ModelSerializer):
         many=True,
         read_only=True,
     )
+    review_count = SerializerMethodField()
 
     class Meta:
         model = Room
@@ -85,3 +86,6 @@ class RoomDetailsSerializer(ModelSerializer):
                 user=request.user,
                 rooms__pk=room.pk,
             ).exists()
+
+    def get_review_count(self, room):
+        return room.get_review_count()
