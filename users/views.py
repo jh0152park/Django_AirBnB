@@ -137,3 +137,10 @@ class JWTLogIn(APIView):
             return Response({"token": token})
         else:
             return Response({"error": "Invalid username or password"})
+
+
+class GithubLogIn(APIView):
+    def post(self, request):
+        code = request.data.get("code")
+        print(code)
+        return Response({"code": code})
