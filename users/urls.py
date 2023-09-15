@@ -8,6 +8,7 @@ from .views import Users
 from .views import PublicUser
 from .views import changePassword
 from .views import JWTLogIn
+from .views import GithubLogIn
 
 urlpatterns = [
     path("", Users.as_view()),
@@ -18,4 +19,5 @@ urlpatterns = [
     path("token-login", obtain_auth_token),
     path("jwt-login", JWTLogIn.as_view()),
     path("@<str:username>", PublicUser.as_view()),
+    path("github", GithubLogIn.as_view()),
 ]
