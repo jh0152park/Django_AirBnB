@@ -142,6 +142,7 @@ class JWTLogIn(APIView):
 
 class GithubLogIn(APIView):
     def post(self, request):
+        # try:
         code = request.data.get("code")
         access_token = requests.post(
             f"https://github.com/login/oauth/access_token?code={code}&client_id=bf19cc5900af3a5bca3c&client_secret={settings.GITHUB_CLIENT_SECRET_KEY}",
@@ -150,6 +151,7 @@ class GithubLogIn(APIView):
             },
         )
         access_token = access_token.json().get("access_token")
+
         user_data = requests.get(
             "https://api.github.com/user",
             headers={
@@ -158,4 +160,33 @@ class GithubLogIn(APIView):
             },
         )
         user_data = user_data.json()
-        return Response({"code": code})
+
+        user_email = requests.get(
+            "https://api.github.com/user/emails",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Accept": "application/json",
+            },
+        )
+        user_email = user_email.json()
+        print(f"\nuser_email: {user_email}\n")
+        try:
+            user = User.objects.get(email=user_email[0]["email"])
+            login(request, user)
+            return Response(status=status.HTTP_200_OK)
+        # try to create a new account
+        except User.DoesNotExist:
+            user = User.objects.create(
+                username=user_data["login"],
+                name=user_data["name"],
+                email=user_email[0]["email"],
+                profile_picture=user_data["avatar_url"],
+            )
+            user.set_unusable_password()
+            user.save()
+            login(request, user)
+            return Response(status=status.HTTP_200_OK)
+
+    # except Exception as error:
+    #     print(f"occurred error as below\n{error}")
+    #     return Response(status=status.HTTP_400_BAD_REQUEST)
