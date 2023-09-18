@@ -193,3 +193,56 @@ class GithubLogIn(APIView):
         except Exception as error:
             print(f"occurred error as below\n{error}")
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class KakaoLogIn(APIView):
+    def post(self, request):
+        try:
+            code = request.data.get("code")
+            access_token = requests.post(
+                "https://kauth.kakao.com/oauth/token",
+                headers={
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                data={
+                    "grant_type": "authorization_code",
+                    "client_id": "fcb3b6ccc19cc01f2fe6aa6bf4cf63dc",
+                    "redirect_uri": "http://127.0.0.1:3000/social/kakao",
+                    "code": code,
+                },
+            )
+            access_token = access_token.json()["access_token"]
+            user_data = requests.get(
+                "https://kapi.kakao.com/v2/user/me",
+                headers={
+                    "Authorization": f"Bearer {access_token}",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            )
+            user_data = user_data.json()
+            for k in user_data.keys():
+                print(k)
+                print(user_data[k])
+                print("\n")
+
+            kakao_account = user_data["kakao_account"]
+            profile = kakao_account["profile"]
+
+            try:
+                user = User.objects.get(email=kakao_account["email"])
+                login(request, user)
+                return Response(status=status.HTTP_200_OK)
+            except User.DoesNotExist:
+                user = User.objects.create(
+                    email=kakao_account["email"],
+                    username=profile["nickname"],
+                    name=profile["nickname"],
+                    profile_picture=profile["profile_image_url"],
+                )
+                user.set_unusable_password()
+                user.save()
+                login(request, user)
+                return Response(status=status.HTTP_200_OK)
+        except Exception as error:
+            print(f"occured exception error as below\n{error}")
+            return Response(status=status.HTTP_400_BAD_REQUEST)
