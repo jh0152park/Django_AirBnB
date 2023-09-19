@@ -101,9 +101,11 @@ class LogIn(APIView):
         )
         if user:
             login(request, user)
-            return Response(status=status.HTTP_200_OK)
+            return Response({"login_success": True}, status=status.HTTP_200_OK)
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"login_success": False}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class LogOut(APIView):
