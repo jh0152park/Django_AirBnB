@@ -77,16 +77,20 @@ class RoomDetailsSerializer(ModelSerializer):
         return room.average_rate()
 
     def get_is_owner(self, room):
-        request = self.context["request"]
-        return room.owner == request.user
+        request = self.context.get("request")
+        if request:
+            return room.owner == request.user
+        # return False
 
     def get_is_liked(self, room):
-        request = self.context["request"]
-        if request.user.is_authenticated:
-            return Wishlist.objects.filter(
-                user=request.user,
-                rooms__pk=room.pk,
-            ).exists()
+        request = self.context.get("request")
+        if request:
+            if request.user.is_authenticated:
+                return Wishlist.objects.filter(
+                    user=request.user,
+                    rooms__pk=room.pk,
+                ).exists()
+        # return False
 
     def get_review_count(self, room):
         return room.get_review_count()
