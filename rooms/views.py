@@ -113,15 +113,22 @@ class Rooms(APIView):
                         owner=request.user,
                         category=category,
                     )
-                    amenities = request.data.get("amenities")
+
+                    # amenities = request.data.get("amenities")
+                    amenities = request.data.get("amenity")
 
                     for amenity_pk in amenities:
                         amenity = Amenity.objects.get(pk=amenity_pk)
                         room.amenity.add(amenity)
-                    serializer = RoomDetailsSerializer(room)
+
+                    serializer = RoomDetailsSerializer(
+                        room,
+                        context={"request": request},
+                    )
 
                     return Response(serializer.data)
-            except Exception:
+            except Exception as e:
+                print(e)
                 raise ParseError("Amenity not found.")
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
