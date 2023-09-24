@@ -26,6 +26,8 @@ from categories.models import Category
 from medias.serializers import PhotoSerializer
 from reviews.serializers import ReviewSerializer
 
+from google_cloud_storage import gcs
+
 
 class Amenities(APIView):
     def get(self, request):
@@ -275,6 +277,8 @@ class RoomPhotos(APIView):
             raise NotFound
 
     def post(self, request, pk):
+        print("run post request")
+
         room = self.get_object(pk)
 
         if room.owner != request.user:
