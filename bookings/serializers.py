@@ -72,6 +72,7 @@ class CreateRoomBookingSerializer(ModelSerializer):
 
     def validate_check_in_date(self, value):
         now = timezone.localtime(timezone.now()).date()
+
         if now > value:
             raise ValidationError(
                 "Can't reservation due to check in date isn't future!"
@@ -89,12 +90,15 @@ class CreateRoomBookingSerializer(ModelSerializer):
         return value
 
     def validate(self, data):
+        room = self.context.get("room")
+
         if data["check_in_date"] >= data["check_out_date"]:
             raise ValidationError(
                 "Check out data is looks like smaller than check in date."
             )
 
         if Booking.objects.filter(
+            room=room,
             check_in_date__lte=data["check_out_date"],
             check_out_date__gte=data["check_in_date"],
         ).exists():
