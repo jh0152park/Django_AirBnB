@@ -155,6 +155,13 @@ class RoomDetail(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk):
+        print("call put request")
+        print(pk)
+        print(request.data.get("name"))
+        print(request.data.get("country"))
+        print(request.data)
+        print(type(request.data))
+
         room = self.get_object(pk)
 
         if request.user != room.owner:
@@ -184,7 +191,7 @@ class RoomDetail(APIView):
                         owner=request.user,
                         category=category,
                     )
-                    amenities = request.data.get("amenities")
+                    amenities = request.data.get("amenity")
                     for amenity_pk in amenities:
                         amenity = Amenity.objects.get(pk=amenity_pk)
                         room.amenity.add(amenity)
