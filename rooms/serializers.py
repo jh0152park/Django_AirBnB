@@ -94,3 +94,9 @@ class RoomDetailsSerializer(ModelSerializer):
 
     def get_review_count(self, room):
         return room.get_review_count()
+
+
+class SimpleRoomSerializer(ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ("name",)

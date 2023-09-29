@@ -51,3 +51,9 @@ class ExperienceDetailSerializer(ModelSerializer):
             "updated_at",
             "category",
         )
+
+
+class SimpleExperienceSerializer(ModelSerializer):
+    class Meta:
+        model = Experience
+        fields = ("name",)

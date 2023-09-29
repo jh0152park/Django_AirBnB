@@ -5,8 +5,11 @@ from django.utils import timezone
 from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import DateField
 from rest_framework.serializers import ValidationError
+from rest_framework.serializers import SerializerMethodField
 
 from .models import Booking
+from rooms.serializers import SimpleRoomSerializer
+from experiences.serializers import SimpleExperienceSerializer
 
 
 class PublicBookingSerializer(ModelSerializer):
@@ -18,6 +21,35 @@ class PublicBookingSerializer(ModelSerializer):
             "check_out_date",
             "experience_time",
             "guests",
+            "room",
+            "experience",
+        )
+
+    room = SimpleRoomSerializer()
+    experience = SimpleExperienceSerializer()
+
+
+class TestReservationSerializer(ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = "__all__"
+        # fields = (
+        #     # "user",
+        #     "check_in_date",
+        #     "check_out_date",
+        #     "guests",
+        # )
+
+
+class TestSerializer(ModelSerializer):
+    room = SimpleRoomSerializer()
+    reservations = SerializerMethodField()
+
+    class Meta:
+        model = Booking
+        fields = (
+            "room",
+            "reservations",
         )
 
 

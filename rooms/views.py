@@ -161,6 +161,9 @@ class RoomDetail(APIView):
         print(request.data.get("country"))
         print(request.data)
         print(type(request.data))
+        for k in request.data.keys():
+            print(f"key: {k}")
+            print(request.data[k])
 
         room = self.get_object(pk)
 
@@ -356,8 +359,8 @@ class RoomBookingCheck(APIView):
 
     def get(self, request, pk):
         room = self.get_object(pk)
-        check_out_date = request.query_params.get("check_out")
-        check_in_date = request.query_params.get("check_in")
+        check_out_date = request.query_params.get("check_in_date")
+        check_in_date = request.query_params.get("check_out_date")
 
         exist = Booking.objects.filter(
             room=room,
@@ -368,3 +371,23 @@ class RoomBookingCheck(APIView):
         if exist:
             return Response({"ok": False})
         return Response({"ok": True})
+
+
+"""
+
+{
+    "address": "Seoul, South Korea",
+    "amenity": [6],
+    "category": 5,
+    "city": "Seoul",
+    "country": "South Korea",
+    "description": "- Beautiful picturesque landscape view\n - Fully furnished studio with a huge window\n Located in the center of Seoul, our studio give…",
+    "kind": "entire_place",
+    "name": "Namsan tower suite_loft with two floors_45㎡",
+    "pet_allow": false,
+    "price": 142000,
+    "rooms": 3,
+    "toilets": 123
+}
+
+"""
