@@ -1,5 +1,7 @@
 import strawberry
+
 from . import models
+from users.types import UserType
 
 
 @strawberry.django.type(models.Room)
@@ -8,3 +10,4 @@ class RoomType:
     kind: strawberry.auto
     country: strawberry.auto
     city: strawberry.auto
+    owner: "UserType"
