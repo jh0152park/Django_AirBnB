@@ -17,6 +17,7 @@ from pathlib import Path
 import os
 import environ
 import dj_database_url
+import sentry_sdk
 
 env = environ.Env()
 
@@ -214,3 +215,10 @@ GITHUB_CLIENT_SECRET_KEY = env("GITHUB_CLIENT_SECRET_KEY")
 
 
 # https://storage.googleapis.com/storage/v1
+
+if not DEBUG:
+    sentry_sdk.init(
+        dsn="https://f1f0f84328fd249aeb0f72124249acab@o4505997077184512.ingest.sentry.io/4505997109166080",
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0,
+    )
