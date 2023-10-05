@@ -22,6 +22,10 @@ google-cloud-storage = "^2.11.0"
 wget = "^3.2"
 strawberry-graphql = {extras = ["debug-server"], version = "^0.209.5"}
 strawberry-graphql-django = "^0.20.0"
+dj-database-url = "^2.1.0"
+psycopg2-binary = "^2.9.9"
+whitenoise = {extras = ["brotli"], version = "^6.5.0"}
+gunicorn = "^21.2.0"
 
 
 [build-system]
