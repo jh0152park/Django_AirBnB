@@ -204,10 +204,10 @@ CSRF_TRUSTED_ORIGINS = [
 GITHUB_CLIENT_SECRET_KEY = env("GITHUB_CLIENT_SECRET_KEY")
 
 # Google Cloud Storage
-GCS_OAUTH_CODE = env("GCS_OAUTH_CODE")
-GS_BUCKET_NAME = env("BUCKET_NAME")
-GS_PROJECT_ID = env("PROJECT_ID")
-DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+# GCS_OAUTH_CODE = env("GCS_OAUTH_CODE")
+# GS_BUCKET_NAME = env("BUCKET_NAME")
+# GS_PROJECT_ID = env("PROJECT_ID")
+# DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 # GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
 #     "..credentials.json"
 # )
